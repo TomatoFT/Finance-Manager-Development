@@ -1,7 +1,0 @@
-[submodule "Finance-Manager-Frontend"]
-	path = frontend
-	url = https://github.com/tanchauKMS/Finance-Manager-Frontend
-
-[submodule "Finance-Manager-Backend"]
-	path = backend
-    url = https://github.com/tanchauKMS/Finance-Manager-Backend
