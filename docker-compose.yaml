@@ -5,6 +5,8 @@ services:
     image: postgres
     environment:
       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./db_data:/var/lib/postgresql/data  # Mount host directory to container directory
     networks:
       - test
 
@@ -12,7 +14,8 @@ services:
     build: ./backend
     command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/code
+      - ./backend:/code  # Mount backend source code
+      - ./backend_data:/var/lib/backend_data  # Example additional volume for backend data
     ports:
       - 8000:8000
     depends_on:
@@ -26,7 +29,10 @@ services:
       # dockerfile: Dockerfile
     environment:
       PORT: 4200
-      # PROXY_API: http://backend:8000/
+      PROXY_API: http://backend:8000/
+    volumes:
+      - ./frontend:/usr/src/app  # Mount frontend source code
+      - ./frontend_data:/var/lib/frontend_data  # Example additional volume for frontend data
     ports:
       - 4200:4200
     networks:
