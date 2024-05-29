@@ -4,3 +4,6 @@
 [submodule "backend"]
 	path = backend
 	url = https://github.com/TomatoFT/Finance-Manager-Backend.git
+[submodule "chatbot"]
+	path = chatbot
+	url = https://github.com/TomatoFT/Finance-Manager-Chatbot-Service.git
