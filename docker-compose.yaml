@@ -4,24 +4,39 @@ services:
   db:
     image: postgres
     environment:
-      - POSTGRES_PASSWORD=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=password
     volumes:
-      - ./db_data:/var/lib/postgresql/data  # Mount host directory to container directory
+        - ./db_data:/var/lib/postgresql/data
+    ports:
+        - 5432:5432
     networks:
-      - test
+        - finmapp
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+        PGADMIN_DEFAULT_EMAIL: 'tomato@finmapp.com'
+        PGADMIN_DEFAULT_PASSWORD: 'tomato'
+    ports:
+        - 16543:80
+    networks:
+        - finmapp
 
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
     command: python3 manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./backend:/code  # Mount backend source code
+      - ./backend:/usr/src/app  # Mount backend source code
       - ./backend_data:/var/lib/backend_data  # Example additional volume for backend data
     ports:
       - 8000:8000
     depends_on:
       - db
     networks:
-      - test
+      - finmapp
 
   frontend:
     build:
@@ -36,7 +51,16 @@ services:
     ports:
       - 4200:4200
     networks:
-      - test
+      - finmapp
+
+
+volumes:
+    postgres-db-volume:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ./data
 
 networks:
-  test:
+  finmapp:
